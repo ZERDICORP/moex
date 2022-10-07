@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  posgtres:
+    image: postgres:14.0
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=zerdicorp1937
+      - POSTGRES_DB=akka
+    command: postgres -p 5432
+    ports:
+      - "5432:5432"
