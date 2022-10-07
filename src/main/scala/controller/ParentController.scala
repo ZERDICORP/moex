@@ -1,4 +1,4 @@
-package com.example.akka_http
+package com.moex.app
 package controller
 
 import akka.http.scaladsl.server.Directives._

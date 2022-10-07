@@ -1,4 +1,4 @@
-package com.example.akka_http
+package com.moex.app
 package configuration
 
 import slick.jdbc.JdbcBackend.Database
