@@ -3,7 +3,7 @@ package dto
 
 /**
  * @author zerdicorp
- * @project akka_http_example
+ * @project moex
  * @created 10/6/22 - 11:22 AM
  */
 

@@ -7,7 +7,7 @@ import slick.lifted.TableQuery
 
 /**
  * @author zerdicorp
- * @project akka_http_example
+ * @project moex
  * @created 10/7/22 - 7:51 PM
  */
 

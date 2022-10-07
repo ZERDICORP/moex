@@ -3,7 +3,7 @@ package constant
 
 /**
  * @author zerdicorp
- * @project akka_http_example
+ * @project moex
  * @created 10/7/22 - 7:22 PM
  */
 

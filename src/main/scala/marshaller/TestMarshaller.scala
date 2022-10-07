@@ -8,7 +8,7 @@ import spray.json.RootJsonFormat
 
 /**
  * @author zerdicorp
- * @project akka_http_example
+ * @project moex
  * @created 10/7/22 - 6:59 PM
  */
 

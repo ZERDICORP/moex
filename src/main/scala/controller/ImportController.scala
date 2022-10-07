@@ -15,7 +15,7 @@ import scala.util.{Failure, Success, Using}
 
 /**
  * @author zerdicorp
- * @project akka_http_example
+ * @project moex
  * @created 10/6/22 - 11:02 AM
  */
 
