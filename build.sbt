@@ -4,8 +4,8 @@ ThisBuild / scalaVersion := "2.13.8"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "akka_http_example",
-    idePackagePrefix := Some("com.example.akka_http"),
+    name := "moex",
+    idePackagePrefix := Some("com.moex.app"),
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-api" % "1.7.5",
       "org.slf4j" % "slf4j-simple" % "1.7.5",
