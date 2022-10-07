@@ -12,5 +12,5 @@ import slick.lifted.TableQuery
  */
 
 trait TestTable {
-  val table = TableQuery[TestModel]
+  val table: TableQuery[TestModel] = TableQuery[TestModel]
 }

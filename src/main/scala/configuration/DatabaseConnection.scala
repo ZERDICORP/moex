@@ -10,5 +10,5 @@ import slick.jdbc.JdbcBackend.Database
  */
 
 trait DatabaseConnection {
-  lazy val db = Database.forConfig("postgres")
+  lazy val db: Database = Database.forConfig("postgres")
 }
