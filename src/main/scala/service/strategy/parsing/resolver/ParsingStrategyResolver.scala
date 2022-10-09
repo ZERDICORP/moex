@@ -1,7 +1,7 @@
 package com.moex.app
 package service.strategy.parsing.resolver
 
-import service.strategy.parsing.{HistoryParsingStrategy, ParsingStrategy}
+import service.strategy.parsing.{HistoryParsingStrategy, ParsingStrategy, SecuritiesParsingStrategy}
 
 /**
  * @author zerdicorp
@@ -10,9 +10,10 @@ import service.strategy.parsing.{HistoryParsingStrategy, ParsingStrategy}
  */
 
 object ParsingStrategyResolver {
-  private val strategies: List[ParsingStrategy] = List {
-    new HistoryParsingStrategy
-  }
+  private val strategies: List[ParsingStrategy] = List(
+    new HistoryParsingStrategy,
+    new SecuritiesParsingStrategy
+  )
 
   def resolve(xmlType: String): ParsingStrategy = {
     strategies.foreach { strategy =>
@@ -20,6 +21,7 @@ object ParsingStrategyResolver {
         return strategy
       }
     }
+    println(strategies.length)
     throw new IllegalStateException(s"unknown type of xml: \"$xmlType\"")
   }
 }

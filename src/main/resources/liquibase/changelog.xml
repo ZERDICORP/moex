@@ -24,4 +24,83 @@
     </rollback>
   </changeSet>
 
+  <changeSet id="2" author="ZERDICORP">
+    <createTable tableName="history">
+      <column name="BOARDID" type="VARCHAR(255)"/>
+      <column name="TRADEDATE" type="date"/>
+      <column name="SHORTNAME" type="VARCHAR(255)"/>
+      <column name="SECID" type="VARCHAR(255)"/>
+      <column name="NUMTRADES" type="DOUBLE PRECISION"/>
+      <column name="VALUE" type="DOUBLE PRECISION"/>
+      <column name="OPEN" type="DOUBLE PRECISION"/>
+      <column name="LOW" type="DOUBLE PRECISION"/>
+      <column name="HIGH" type="DOUBLE PRECISION"/>
+      <column name="LEGALCLOSEPRICE" type="DOUBLE PRECISION"/>
+      <column name="WAPRICE" type="DOUBLE PRECISION"/>
+      <column name="CLOSE" type="DOUBLE PRECISION"/>
+      <column name="VOLUME" type="DOUBLE PRECISION"/>
+      <column name="MARKETPRICE2" type="DOUBLE PRECISION"/>
+      <column name="MARKETPRICE3" type="DOUBLE PRECISION"/>
+      <column name="ADMITTEDQUOTE" type="DOUBLE PRECISION"/>
+      <column name="MP2VALTRD" type="DOUBLE PRECISION"/>
+      <column name="MARKETPRICE3TRADESVALUE" type="DOUBLE PRECISION"/>
+      <column name="ADMITTEDVALUE" type="DOUBLE PRECISION"/>
+      <column name="WAVAL" type="DOUBLE PRECISION"/>
+    </createTable>
+
+    <rollback>
+      <dropTable tableName="history"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="3" author="ZERDICORP">
+    <createTable tableName="emitent">
+      <column name="id" type="BIGINT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="title" type="VARCHAR(255)"/>
+      <column name="inn" type="VARCHAR(255)"/>
+      <column name="okpo" type="VARCHAR(255)"/>
+    </createTable>
+
+    <createTable tableName="security">
+      <column name="id" type="BIGINT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="secid" type="VARCHAR(255)"/>
+      <column name="shortname" type="VARCHAR(255)"/>
+      <column name="regnumber" type="VARCHAR(255)"/>
+      <column name="name" type="VARCHAR(255)"/>
+      <column name="isin" type="VARCHAR(255)"/>
+      <column name="is_traded" type="INT"/>
+      <column name="emitent_id" type="INT">
+        <constraints nullable="false" foreignKeyName="fk_emitent_id" references="emitent(id)"/>
+      </column>
+      <column name="gosreg" type="VARCHAR(255)"/>
+      <column name="type" type="VARCHAR(255)"/>
+      <column name="group" type="VARCHAR(255)"/>
+      <column name="primary_boardid" type="VARCHAR(255)"/>
+      <column name="marketprice_boardid" type="VARCHAR(255)"/>
+    </createTable>
+
+    <rollback>
+      <dropTable tableName="security"/>
+      <dropTable tableName="emitent"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="4" author="ZERDICORP">
+    <addColumn tableName="history">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </addColumn>
+
+    <rollback>
+      <dropColumn columnName="id" schemaName="public" tableName="history">
+        <column name="id"/>
+      </dropColumn>
+    </rollback>
+  </changeSet>
+
 </databaseChangeLog>

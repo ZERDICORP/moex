@@ -14,14 +14,12 @@ import akka.http.scaladsl.server.Route
 
 private class ImportController {
   val routes: Route = {
-    post {
-      path("import") {
-        extractRequestContext { ctx =>
-          extractExecutionContext { exc =>
-            fileUpload("file") {
-              case (_, fileStream) =>
-                complete(ImportService.importXml(fileStream)(ctx.materializer, exc))
-            }
+    (post & path("import")) {
+      extractRequestContext { ctx =>
+        extractExecutionContext { exc =>
+          fileUpload("file") {
+            case (_, fileStream) =>
+              complete(ImportService.importXml(fileStream)(ctx.materializer, exc))
           }
         }
       }

@@ -25,6 +25,8 @@ lazy val root = (project in file("."))
 
       "org.postgresql" % "postgresql" % "42.3.4",
 
-      "org.scala-lang.modules" %% "scala-xml" % "2.1.0"
+      "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
+
+      "org.typelevel" %% "cats-core" % "2.8.0"
     )
   )

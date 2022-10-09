@@ -7,11 +7,13 @@ import repository.XmlRepository
 import service.strategy.parsing.ParsingStrategy
 import service.strategy.parsing.resolver.ParsingStrategyResolver
 
+import akka.actor.typed.ActorSystem
 import akka.http.scaladsl.model.{StatusCode, StatusCodes}
 import akka.stream.Materializer
 import akka.stream.scaladsl.{FileIO, Source}
 import akka.util.ByteString
 
+import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source.fromFile
@@ -26,7 +28,7 @@ import scala.xml.XML
  */
 
 object XmlService extends XmlStatus {
-  def parse(xmlDto: XmlDto): Unit = {
+  def parse(xmlDto: XmlDto)(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]): Unit = {
     XmlRepository.updateStatusById(xmlDto.id, PARSING_STARTED)
     println("Parsing started..")
 
@@ -38,14 +40,14 @@ object XmlService extends XmlStatus {
 
       try {
         val parsingStrategy: ParsingStrategy = ParsingStrategyResolver.resolve(data \ "@id" text)
-        parsingStrategy.parse(data)
+        parsingStrategy.parse(data)(exc, actorSystem)
 
         XmlRepository.updateStatusById(xmlDto.id, PARSING_COMPLETED)
         println("Parsing completed..")
       } catch {
         case e: Throwable =>
           XmlRepository.updateStatusById(xmlDto.id, PARSING_FAILED)
-          println("Parsing failed.. " + e.getMessage)
+          println("Parsing failed.. " + e)
       }
     }
 
@@ -67,6 +69,16 @@ object XmlService extends XmlStatus {
               case Success(_) => StatusCodes.OK
               case Failure(_) => StatusCodes.InternalServerError
             }
+        case Failure(_) => StatusCodes.InternalServerError
+      }
+    StatusCodes.OK
+  }
+
+  def save(data: String)(implicit exc: ExecutionContext): StatusCode = {
+    XmlRepository.save(XmlDto(Option.empty, NEW))
+      .onComplete {
+        case Success(xmlDto: XmlDto) =>
+          Files.write(Paths.get(s"data/${xmlDto.id.get}"), data.getBytes(StandardCharsets.UTF_8))
         case Failure(_) => StatusCodes.InternalServerError
       }
     StatusCodes.OK

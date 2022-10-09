@@ -13,10 +13,16 @@ import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 
 object ParentController {
   private val importController: ImportController = new ImportController
+  private val securityController: SecurityController = new SecurityController
+  private val emitentController: EmitentController = new EmitentController
+  private val historyUnitController: HistoryUnitController = new HistoryUnitController
 
   val routes: Route = cors() {
     pathPrefix("api" / "v1") {
-      importController.routes
+      importController.routes ~
+        securityController.routes ~
+        emitentController.routes ~
+        historyUnitController.routes
     }
   }
 }

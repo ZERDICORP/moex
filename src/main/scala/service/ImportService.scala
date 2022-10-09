@@ -8,7 +8,7 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 
-import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.ExecutionContext
 
 /**
  * @author zerdicorp
@@ -18,7 +18,11 @@ import scala.concurrent.ExecutionContextExecutor
 
 object ImportService extends XmlStatus {
   def importXml(source: Source[ByteString, Any])
-               (implicit mtz: Materializer, exc: ExecutionContextExecutor): StatusCode = {
+               (implicit mtz: Materializer, exc: ExecutionContext): StatusCode = {
     XmlService.save(source)(mtz, exc)
+  }
+
+  def importXml(data: String)(implicit exc: ExecutionContext): StatusCode = {
+    XmlService.save(data)(exc)
   }
 }
