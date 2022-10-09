@@ -1,0 +1,25 @@
+package com.moex.app
+package service.strategy.parsing.resolver
+
+import service.strategy.parsing.{HistoryParsingStrategy, ParsingStrategy}
+
+/**
+ * @author zerdicorp
+ * @project moex
+ * @created 10/9/22 - 2:56 AM
+ */
+
+object ParsingStrategyResolver {
+  private val strategies: List[ParsingStrategy] = List {
+    new HistoryParsingStrategy
+  }
+
+  def resolve(xmlType: String): ParsingStrategy = {
+    strategies.foreach { strategy =>
+      if (strategy accepts xmlType) {
+        return strategy
+      }
+    }
+    throw new IllegalStateException(s"unknown type of xml: \"$xmlType\"")
+  }
+}

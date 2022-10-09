@@ -1,7 +1,7 @@
 package com.moex.app
 package marshaller
 
-import dto.TestDto
+import dto.XmlDto
 
 import spray.json.DefaultJsonProtocol._
 import spray.json.RootJsonFormat
@@ -13,5 +13,5 @@ import spray.json.RootJsonFormat
  */
 
 trait TestMarshaller {
-  val testMarshaller: RootJsonFormat[TestDto] = jsonFormat3(TestDto.apply)
+  val testMarshaller: RootJsonFormat[XmlDto] = jsonFormat2(XmlDto.apply)
 }

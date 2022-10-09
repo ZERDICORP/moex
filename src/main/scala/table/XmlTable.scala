@@ -1,7 +1,7 @@
 package com.moex.app
 package table
 
-import model.TestModel
+import model.XmlModel
 
 import slick.lifted.TableQuery
 
@@ -11,6 +11,6 @@ import slick.lifted.TableQuery
  * @created 10/7/22 - 7:51 PM
  */
 
-trait TestTable {
-  val table: TableQuery[TestModel] = TableQuery[TestModel]
+trait XmlTable {
+  val table: TableQuery[XmlModel] = TableQuery[XmlModel]
 }

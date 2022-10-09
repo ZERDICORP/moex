@@ -11,4 +11,5 @@ trait XmlStatus {
   val NEW: String = "NEW"
   val PARSING_STARTED: String = "PARSING_STARTED"
   val PARSING_COMPLETED: String = "PARSING_COMPLETED"
+  val PARSING_FAILED: String = "PARSING_FAILED"
 }

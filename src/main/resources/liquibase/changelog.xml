@@ -10,20 +10,17 @@
 	http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
   <changeSet id="1" author="ZERDICORP">
-    <createTable tableName="user">
+    <createTable tableName="xml">
       <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="name" type="VARCHAR(255)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="email" type="VARCHAR(255)">
+      <column name="status" type="VARCHAR(255)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <rollback>
-      <dropTable tableName="user"/>
+      <dropTable tableName="xml"/>
     </rollback>
   </changeSet>
 

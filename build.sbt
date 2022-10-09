@@ -23,6 +23,8 @@ lazy val root = (project in file("."))
       "com.github.tminglei" %% "slick-pg" % "0.20.3",
       "com.github.tminglei" %% "slick-pg_play-json" % "0.20.3",
 
-      "org.postgresql" % "postgresql" % "42.3.4"
+      "org.postgresql" % "postgresql" % "42.3.4",
+
+      "org.scala-lang.modules" %% "scala-xml" % "2.1.0"
     )
   )
