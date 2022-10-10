@@ -30,7 +30,6 @@ import scala.xml.XML
 object XmlService extends XmlStatus {
   def parse(xmlDto: XmlDto)(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]): Unit = {
     XmlRepository.updateStatusById(xmlDto.id, PARSING_STARTED)
-    println("Parsing started..")
 
     val filePath: String = "data/" + xmlDto.id.get
     Using(fromFile(filePath)) { source =>
@@ -43,16 +42,13 @@ object XmlService extends XmlStatus {
         parsingStrategy.parse(data, xmlDto.secid)(exc, actorSystem)
 
         XmlRepository.updateStatusById(xmlDto.id, PARSING_COMPLETED)
-        println("Parsing completed..")
       } catch {
         case e: Throwable =>
           XmlRepository.updateStatusById(xmlDto.id, PARSING_FAILED)
-          println("Parsing failed.. " + e)
       }
     }
 
     Files.deleteIfExists(Paths.get(filePath))
-    println("File deleted..")
   }
 
   def findAllWithStatus(status: String)(implicit exc: ExecutionContext): Future[Seq[XmlDto]] = {

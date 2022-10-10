@@ -77,7 +77,6 @@ private class HistoryParsingStrategy extends ParsingStrategy with XmlType {
 
   private class Request(secid: String)(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]) extends Runnable {
     override def run(): Unit = {
-      println(s"http://iss.moex.com/iss/securities.xml?q=$secid")
       Http().singleRequest(HttpRequest(uri = s"http://iss.moex.com/iss/securities.xml?q=$secid"))
         .flatMap(response => Unmarshal(response.entity).to[String])
         .onComplete {

@@ -21,7 +21,6 @@ object ParsingStrategyResolver {
         return strategy
       }
     }
-    println(strategies.length)
     throw new IllegalStateException(s"unknown type of xml: \"$xmlType\"")
   }
 }
