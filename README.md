@@ -13,15 +13,21 @@
 * ***Docker-Compose*** (v2.6.1)
 * ***Liquibase*** (v4.13.0)
 
-## Architecture
-#### The chosen solution is based on the classic layered architecture
+## Architecture Solution
+The chosen solution is based on the classic layered architecture  
+
 ![image](https://user-images.githubusercontent.com/56264511/194931012-43eae9f6-6a46-4cd8-ad66-b533f801228d.png)
 - ***Presentation Layer*** represented as ***controllers***
 - ***Business Layer*** represented as ***services***
 - ***Persistence Layer*** represented as ***repositories***
 - ***Database Layer*** represented as ***PostgreSQL***
 
-## Launch guide
+## «Import and Parsing XML» Solution
+Importing and parsing xml works based on message queue and scheduler.  
+The `xml` table in the database is used as the message queue.  
+And as a scheduler, the mechanism (Scheduler) built into akka http.
+
+## Launch Guide
 #### 1. Open the `local/infra` folder and run the following command:
 ```
 $ sudo docker-compose up
