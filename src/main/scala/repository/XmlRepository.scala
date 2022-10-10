@@ -17,15 +17,15 @@ import scala.concurrent.Future
 
 object XmlRepository extends DatabaseConnection with XmlTable {
   def updateStatusById(id: Option[Long], status: String): Unit = {
-    val q = for {t <- table if t.id === id} yield t.status
+    val q = for {t <- xmlTable if t.id === id} yield t.status
     db.run(q.update(status))
   }
 
   def findAllWithStatus(status: String): Future[Seq[XmlDto]] = {
-    db.run(table.filter(_.status === status).result)
+    db.run(xmlTable.filter(_.status === status).result)
   }
 
   def save(xml: XmlDto): Future[XmlDto] = {
-    db.run(table.returning(table) += xml)
+    db.run(xmlTable.returning(xmlTable) += xml)
   }
 }

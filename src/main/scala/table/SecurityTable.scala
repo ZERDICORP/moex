@@ -12,5 +12,5 @@ import slick.lifted.TableQuery
  */
 
 trait SecurityTable {
-  val table: TableQuery[SecurityModel] = TableQuery[SecurityModel]
+  val securityTable: TableQuery[SecurityModel] = TableQuery[SecurityModel]
 }

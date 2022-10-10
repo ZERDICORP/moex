@@ -8,5 +8,5 @@ package dto
  */
 
 case class SecurityDto(id: Option[Long], secid: String, shortname: String, regnumber: String, name: String,
-                       sin: String, is_traded: Option[Long], emitent_id: Option[Long], gosreg: String, `type`: String,
+                       isin: String, is_traded: Option[Long], emitent_id: Option[Long], gosreg: String, `type`: String,
                        group: String, primary_boardid: String, marketprice_boardid: String)

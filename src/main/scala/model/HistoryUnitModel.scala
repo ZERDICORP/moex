@@ -19,7 +19,7 @@ class HistoryUnitModel(tag: Tag) extends Table[HistoryUnitDto](tag, "history") {
 
   def boardid: Rep[String] = column[String]("boardid")
 
-  def tradedate: Rep[LocalDate] = column[LocalDate]("tradedate")
+  def tradedate: Rep[Option[LocalDate]] = column[Option[LocalDate]]("tradedate")
 
   def shortname: Rep[String] = column[String]("shortname")
 

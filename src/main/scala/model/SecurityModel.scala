@@ -42,6 +42,6 @@ class SecurityModel(tag: Tag) extends Table[SecurityDto](tag, "security") {
   def fk_emitent_id: ForeignKeyQuery[EmitentModel, EmitentDto] = foreignKey("fk_emitent_id", emitent_id,
     TableQuery[EmitentModel])(_.id, ForeignKeyAction.Restrict, ForeignKeyAction.Cascade)
 
-  override def * : ProvenShape[SecurityDto] = (id, shortname, secid, regnumber, name, isin, is_traded, emitent_id,
+  override def * : ProvenShape[SecurityDto] = (id, secid, shortname, regnumber, name, isin, is_traded, emitent_id,
     gosreg, `type`, group, primary_boardid, marketprice_boardid) <> (SecurityDto.tupled, SecurityDto.unapply)
 }

@@ -2,12 +2,10 @@ package com.moex.app
 package marshaller
 
 import dto.HistoryUnitDto
+import marshaller.format.LocalDateJsonFormat
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import spray.json.{DefaultJsonProtocol, DeserializationException, JsString, JsValue, RootJsonFormat}
-
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 /**
  * @author zerdicorp
@@ -16,20 +14,6 @@ import java.time.format.DateTimeFormatter
  */
 
 trait HistoryUnitMarshaller extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit object LocalDateJsonFormat extends RootJsonFormat[LocalDate] {
-    private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-    override def write(obj: LocalDate): JsString = {
-      JsString(dateFormatter.format(obj))
-    }
-
-    override def read(json: JsValue): LocalDate = {
-      json match {
-        case JsString(s) => LocalDate.parse(s, dateFormatter)
-        case _ => throw DeserializationException("Error info you want here ...")
-      }
-    }
-  }
-
-  implicit val historyMarshaller: RootJsonFormat[HistoryUnitDto] = jsonFormat21(HistoryUnitDto.apply)
+  implicit val historyUnitMarshaller_localDateJsonFormat: LocalDateJsonFormat = new LocalDateJsonFormat
+  implicit val historyUnitMarshaller: RootJsonFormat[HistoryUnitDto] = jsonFormat21(HistoryUnitDto.apply)
 }

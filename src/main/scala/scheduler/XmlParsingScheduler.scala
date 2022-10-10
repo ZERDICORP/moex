@@ -18,7 +18,7 @@ import scala.util.{Failure, Success}
  */
 
 private class XmlParsingScheduler(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]) extends Runnable with XmlStatus {
-  private val executorService: ExecutorService = Executors.newFixedThreadPool(100)
+  private val executorService: ExecutorService = Executors.newFixedThreadPool(1000)
 
   private class Processor(xml: XmlDto) extends Runnable {
     override def run(): Unit = {

@@ -4,6 +4,7 @@ package service
 import dto.HistoryUnitDto
 import repository.HistoryUnitRepository
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 /**
@@ -13,6 +14,15 @@ import scala.concurrent.Future
  */
 
 object HistoryUnitService {
+  def findAllJoined(orderBy: String, emitentTitle: String, tradedate: String):
+  Future[Seq[(String, String, String, String, Option[LocalDate], Option[Double], Option[Double], Option[Double])]] = {
+    HistoryUnitRepository.findAllJoined(orderBy, emitentTitle, tradedate)
+  }
+
+  def findAll(): Future[Seq[HistoryUnitDto]] = {
+    HistoryUnitRepository.findAll()
+  }
+
   def update(historyUnitDto: HistoryUnitDto): Future[Int] = {
     HistoryUnitRepository.update(historyUnitDto)
   }

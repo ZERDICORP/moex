@@ -2,12 +2,8 @@
 <databaseChangeLog
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-  xmlns:pro="http://www.liquibase.org/xml/ns/pro"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-	http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-	http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
   <changeSet id="1" author="ZERDICORP">
     <createTable tableName="xml">
@@ -17,15 +13,13 @@
       <column name="status" type="VARCHAR(255)">
         <constraints nullable="false"/>
       </column>
+      <column name="secid" type="VARCHAR(255)"/>
     </createTable>
 
-    <rollback>
-      <dropTable tableName="xml"/>
-    </rollback>
-  </changeSet>
-
-  <changeSet id="2" author="ZERDICORP">
     <createTable tableName="history">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
       <column name="BOARDID" type="VARCHAR(255)"/>
       <column name="TRADEDATE" type="date"/>
       <column name="SHORTNAME" type="VARCHAR(255)"/>
@@ -48,12 +42,6 @@
       <column name="WAVAL" type="DOUBLE PRECISION"/>
     </createTable>
 
-    <rollback>
-      <dropTable tableName="history"/>
-    </rollback>
-  </changeSet>
-
-  <changeSet id="3" author="ZERDICORP">
     <createTable tableName="emitent">
       <column name="id" type="BIGINT">
         <constraints primaryKey="true" nullable="false"/>
@@ -83,24 +71,22 @@
       <column name="marketprice_boardid" type="VARCHAR(255)"/>
     </createTable>
 
+    <sql>
+      CREATE EXTENSION IF NOT EXISTS pg_trgm;
+      CREATE INDEX IF NOT EXISTS emitent_title_gin ON emitent USING gin (UPPER("emitent"."title"::text)
+      gin_trgm_ops);
+    </sql>
+
     <rollback>
+      <sql>
+        DROP INDEX IF EXISTS emitent_title_gin;
+        DROP EXTENSION IF EXISTS pg_trgm;
+      </sql>
+
+      <dropTable tableName="xml"/>
+      <dropTable tableName="history"/>
       <dropTable tableName="security"/>
       <dropTable tableName="emitent"/>
     </rollback>
   </changeSet>
-
-  <changeSet id="4" author="ZERDICORP">
-    <addColumn tableName="history">
-      <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-    </addColumn>
-
-    <rollback>
-      <dropColumn columnName="id" schemaName="public" tableName="history">
-        <column name="id"/>
-      </dropColumn>
-    </rollback>
-  </changeSet>
-
 </databaseChangeLog>

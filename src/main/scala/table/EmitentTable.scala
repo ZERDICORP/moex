@@ -12,5 +12,5 @@ import slick.lifted.TableQuery
  */
 
 trait EmitentTable {
-  val table: TableQuery[EmitentModel] = TableQuery[EmitentModel]
+  val emitentTable: TableQuery[EmitentModel] = TableQuery[EmitentModel]
 }

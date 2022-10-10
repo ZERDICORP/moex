@@ -17,7 +17,9 @@ import akka.http.scaladsl.server.Route
 
 private class EmitentController extends EmitentMarshaller {
   val routes: Route = {
-    (get & path("emitent" / LongNumber)) { id =>
+    (get & path("emitents")) {
+      complete(EmitentService.findAll())
+    } ~ (get & path("emitents" / LongNumber)) { id =>
       onSuccess(EmitentService.findById(id)) { emitent =>
         if (emitent.isDefined) {
           complete(emitent)
@@ -25,7 +27,7 @@ private class EmitentController extends EmitentMarshaller {
           complete(StatusCodes.NotFound)
         }
       }
-    } ~ (delete & path("emitent" / LongNumber)) { id =>
+    } ~ (delete & path("emitents" / LongNumber)) { id =>
       onSuccess(EmitentService.deleteById(id)) { count =>
         if (count > 0) {
           complete(StatusCodes.OK)
@@ -33,7 +35,7 @@ private class EmitentController extends EmitentMarshaller {
           complete(StatusCodes.NotFound)
         }
       }
-    } ~ (put & path("emitent") & entity(as[EmitentDto])) { emitentDto =>
+    } ~ (put & path("emitents") & entity(as[EmitentDto])) { emitentDto =>
       onSuccess(EmitentService.update(emitentDto)) { count =>
         if (count > 0) {
           complete(StatusCodes.OK)
@@ -41,7 +43,7 @@ private class EmitentController extends EmitentMarshaller {
           complete(StatusCodes.NotFound)
         }
       }
-    } ~ (post & path("emitent") & entity(as[EmitentDto])) { emitentDto =>
+    } ~ (post & path("emitents") & entity(as[EmitentDto])) { emitentDto =>
       EmitentService.save(emitentDto)
       complete(StatusCodes.OK)
     }

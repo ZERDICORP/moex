@@ -4,9 +4,10 @@ package controller
 import dto.SecurityDto
 import marshaller.SecurityMarshaller
 import service.SecurityService
+import validation.SecurityValidator
 
 import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Directives.{complete, _}
 import akka.http.scaladsl.server.Route
 
 /**
@@ -17,7 +18,9 @@ import akka.http.scaladsl.server.Route
 
 private class SecurityController extends SecurityMarshaller {
   val routes: Route = {
-    (get & path("security" / LongNumber)) { id =>
+    (get & path("securities")) {
+      complete(SecurityService.findAll())
+    } ~ (get & path("securities" / LongNumber)) { id =>
       onSuccess(SecurityService.findById(id)) { security =>
         if (security.isDefined) {
           complete(security)
@@ -25,7 +28,7 @@ private class SecurityController extends SecurityMarshaller {
           complete(StatusCodes.NotFound)
         }
       }
-    } ~ (delete & path("security" / LongNumber)) { id =>
+    } ~ (delete & path("securities" / LongNumber)) { id =>
       onSuccess(SecurityService.deleteById(id)) { count =>
         if (count > 0) {
           complete(StatusCodes.OK)
@@ -33,7 +36,7 @@ private class SecurityController extends SecurityMarshaller {
           complete(StatusCodes.NotFound)
         }
       }
-    } ~ (put & path("security") & entity(as[SecurityDto])) { securityDto =>
+    } ~ (put & path("securities") & entity(as[SecurityDto])) { securityDto =>
       onSuccess(SecurityService.update(securityDto)) { count =>
         if (count > 0) {
           complete(StatusCodes.OK)
@@ -41,10 +44,14 @@ private class SecurityController extends SecurityMarshaller {
           complete(StatusCodes.NotFound)
         }
       }
-    } ~ (post & path("security") & entity(as[SecurityDto])) { securityDto =>
-      // TODO: validate security name
-      SecurityService.save(securityDto)
-      complete(StatusCodes.OK)
+    } ~ (post & path("securities") & entity(as[SecurityDto])) { securityDto =>
+      SecurityValidator.validate(securityDto).fold(
+        error => complete(StatusCodes.BadRequest -> error),
+        validatedSecurityDto => {
+          SecurityService.save(validatedSecurityDto)
+          complete(StatusCodes.OK)
+        }
+      )
     }
   }
 }

@@ -23,32 +23,35 @@ private class SecuritiesParsingStrategy extends ParsingStrategy with XmlType {
     xmlType.toUpperCase.equals(SECURITIES)
   }
 
-  override def parse(xml: Node)(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]): Unit = {
+  override def parse(xml: Node, secid: Option[String])(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]): Unit = {
     xml \\ "row" foreach { row =>
-      val emitentDto: EmitentDto = EmitentDto(
-        parseLong(row \ "@emitent_id" text),
-        row \ "@emitent_title" text,
-        row \ "@emitent_inn" text,
-        row \ "@emitent_okpo" text)
+      if (secid.isEmpty || (row \ "@secid" text).equals(secid.get)) {
+        val emitentDto: EmitentDto = EmitentDto(
+          parseLong(row \ "@emitent_id" text),
+          row \ "@emitent_title" text,
+          row \ "@emitent_inn" text,
+          row \ "@emitent_okpo" text)
 
-      EmitentService.save(emitentDto)
+        EmitentService.save(emitentDto)
+          .onComplete { _ =>
+            val securityDto: SecurityDto = SecurityDto(
+              parseLong(row \ "@id" text),
+              row \ "@secid" text,
+              row \ "@shortname" text,
+              row \ "@regnumber" text,
+              row \ "@name" text,
+              row \ "@isin" text,
+              parseLong(row \ "@is_traded" text),
+              parseLong(row \ "@emitent_id" text),
+              row \ "@gosreg" text,
+              row \ "@type" text,
+              row \ "@group" text,
+              row \ "@primary_boardid" text,
+              row \ "@marketprice_boardid" text)
 
-      val securityDto: SecurityDto = SecurityDto(
-        parseLong(row \ "@id" text),
-        row \ "@secid" text,
-        row \ "@shortname" text,
-        row \ "@regnumber" text,
-        row \ "@name" text,
-        row \ "@isin" text,
-        parseLong(row \ "@is_traded" text),
-        parseLong(row \ "@emitent_id" text),
-        row \ "@gosreg" text,
-        row \ "@type" text,
-        row \ "@group" text,
-        row \ "@primary_boardid" text,
-        row \ "@marketprice_boardid" text)
-
-      SecurityService.save(securityDto)
+            SecurityService.save(securityDto)
+          }
+      }
     }
   }
 }

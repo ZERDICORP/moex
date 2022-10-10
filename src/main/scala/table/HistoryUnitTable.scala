@@ -12,5 +12,5 @@ import slick.lifted.TableQuery
  */
 
 trait HistoryUnitTable {
-  val table: TableQuery[HistoryUnitModel] = TableQuery[HistoryUnitModel]
+  val historyUnitTable: TableQuery[HistoryUnitModel] = TableQuery[HistoryUnitModel]
 }

@@ -17,12 +17,15 @@ import scala.concurrent.ExecutionContext
  */
 
 object ImportService extends XmlStatus {
-  def importXml(source: Source[ByteString, Any])
-               (implicit mtz: Materializer, exc: ExecutionContext): StatusCode = {
+  def importXml(source: Source[ByteString, Any])(implicit mtz: Materializer, exc: ExecutionContext): StatusCode = {
     XmlService.save(source)(mtz, exc)
   }
 
   def importXml(data: String)(implicit exc: ExecutionContext): StatusCode = {
-    XmlService.save(data)(exc)
+    XmlService.save(data, Option.empty)(exc)
+  }
+
+  def importXmlWithSecid(data: String, secid: String)(implicit exc: ExecutionContext): StatusCode = {
+    XmlService.save(data, Option(secid))(exc)
   }
 }

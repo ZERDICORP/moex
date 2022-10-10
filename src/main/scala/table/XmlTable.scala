@@ -12,5 +12,5 @@ import slick.lifted.TableQuery
  */
 
 trait XmlTable {
-  val table: TableQuery[XmlModel] = TableQuery[XmlModel]
+  val xmlTable: TableQuery[XmlModel] = TableQuery[XmlModel]
 }

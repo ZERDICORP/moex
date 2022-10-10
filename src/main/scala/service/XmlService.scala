@@ -40,7 +40,7 @@ object XmlService extends XmlStatus {
 
       try {
         val parsingStrategy: ParsingStrategy = ParsingStrategyResolver.resolve(data \ "@id" text)
-        parsingStrategy.parse(data)(exc, actorSystem)
+        parsingStrategy.parse(data, xmlDto.secid)(exc, actorSystem)
 
         XmlRepository.updateStatusById(xmlDto.id, PARSING_COMPLETED)
         println("Parsing completed..")
@@ -61,7 +61,7 @@ object XmlService extends XmlStatus {
 
   def save(source: Source[ByteString, Any])
           (implicit mtz: Materializer, exc: ExecutionContext): StatusCode = {
-    XmlRepository.save(XmlDto(Option.empty, NEW))
+    XmlRepository.save(XmlDto(Option.empty, NEW, Option.empty))
       .onComplete {
         case Success(xmlDto: XmlDto) =>
           source.runWith(FileIO.toPath(Paths.get("data").resolve(xmlDto.id.get.toString)))
@@ -74,8 +74,8 @@ object XmlService extends XmlStatus {
     StatusCodes.OK
   }
 
-  def save(data: String)(implicit exc: ExecutionContext): StatusCode = {
-    XmlRepository.save(XmlDto(Option.empty, NEW))
+  def save(data: String, secid: Option[String])(implicit exc: ExecutionContext): StatusCode = {
+    XmlRepository.save(XmlDto(Option.empty, NEW, secid))
       .onComplete {
         case Success(xmlDto: XmlDto) =>
           Files.write(Paths.get(s"data/${xmlDto.id.get}"), data.getBytes(StandardCharsets.UTF_8))

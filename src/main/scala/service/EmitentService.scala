@@ -13,6 +13,10 @@ import scala.concurrent.Future
  */
 
 object EmitentService {
+  def findAll(): Future[Seq[EmitentDto]] = {
+    EmitentRepository.findAll()
+  }
+
   def update(emitentDto: EmitentDto): Future[Int] = {
     EmitentRepository.update(emitentDto)
   }
@@ -25,7 +29,7 @@ object EmitentService {
     EmitentRepository.findById(id)
   }
 
-  def save(emitent: EmitentDto): Unit = {
+  def save(emitent: EmitentDto): Future[EmitentDto] = {
     EmitentRepository.save(emitent)
   }
 }

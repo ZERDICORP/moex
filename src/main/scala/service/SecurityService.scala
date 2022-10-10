@@ -13,6 +13,10 @@ import scala.concurrent.Future
  */
 
 object SecurityService {
+  def findAll(): Future[Seq[SecurityDto]] = {
+    SecurityRepository.findAll()
+  }
+
   def update(securityDto: SecurityDto): Future[Int] = {
     SecurityRepository.update(securityDto)
   }

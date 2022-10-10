@@ -15,5 +15,5 @@ import scala.xml.Node
 trait ParsingStrategy {
   def accepts(xmlType: String): Boolean
 
-  def parse(xml: Node)(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]): Unit
+  def parse(xml: Node, secid: Option[String])(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]): Unit
 }

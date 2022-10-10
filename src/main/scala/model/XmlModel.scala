@@ -17,5 +17,7 @@ class XmlModel(tag: Tag) extends Table[XmlDto](tag, "xml") {
 
   def status: Rep[String] = column[String]("status")
 
-  override def * : ProvenShape[XmlDto] = (id, status) <> (XmlDto.tupled, XmlDto.unapply)
+  def secid: Rep[Option[String]] = column[Option[String]]("secid")
+
+  override def * : ProvenShape[XmlDto] = (id, status, secid) <> (XmlDto.tupled, XmlDto.unapply)
 }

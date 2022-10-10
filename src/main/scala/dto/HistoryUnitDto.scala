@@ -9,7 +9,7 @@ import java.time.LocalDate
  * @created 10/9/22 - 6:39 PM
  */
 
-final case class HistoryUnitDto(id: Option[Long], boardid: String, tradedate: LocalDate, shortname: String,
+final case class HistoryUnitDto(id: Option[Long], boardid: String, tradedate: Option[LocalDate], shortname: String,
                                 secid: String, numtrades: Option[Double], value: Option[Double], open: Option[Double],
                                 low: Option[Double], high: Option[Double], legalcloseprice: Option[Double],
                                 waprice: Option[Double], close: Option[Double], volume: Option[Double],

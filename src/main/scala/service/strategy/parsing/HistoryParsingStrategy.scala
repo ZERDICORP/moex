@@ -4,15 +4,13 @@ package service.strategy.parsing
 import constant.XmlType
 import dto.HistoryUnitDto
 import service.{HistoryUnitService, ImportService, SecurityService}
-import util.ParserUtil.parseDouble
+import util.ParserUtil.{parseDouble, parseLocalDate}
 
 import akka.actor.typed.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpRequest
 import akka.http.scaladsl.unmarshalling.Unmarshal
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.concurrent.{ExecutorService, Executors}
 import scala.collection.immutable.HashSet
 import scala.concurrent.ExecutionContext
@@ -27,21 +25,20 @@ import scala.xml.Node
  */
 
 private class HistoryParsingStrategy extends ParsingStrategy with XmlType {
-  private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
   private val executorService: ExecutorService = Executors.newFixedThreadPool(1000)
 
   override def accepts(xmlType: String): Boolean = {
     xmlType.toUpperCase.equals(HISTORY)
   }
 
-  override def parse(xml: Node)(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]): Unit = {
+  override def parse(xml: Node, secid: Option[String])(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]): Unit = {
     var missingSecurities: Set[String] = HashSet()
 
     xml \\ "row" foreach { row =>
       val historyUnitDto: HistoryUnitDto = HistoryUnitDto(
         Option.empty,
         row \ "@BOARDID" text,
-        LocalDate.parse(row \ "@TRADEDATE" text, dateFormatter),
+        parseLocalDate(row \ "@TRADEDATE" text),
         row \ "@SHORTNAME" text,
         row \ "@SECID" text,
         parseDouble(row \ "@NUMTRADES" text),
@@ -80,10 +77,11 @@ private class HistoryParsingStrategy extends ParsingStrategy with XmlType {
 
   private class Request(secid: String)(implicit exc: ExecutionContext, actorSystem: ActorSystem[Nothing]) extends Runnable {
     override def run(): Unit = {
-      Http().singleRequest(HttpRequest(uri = "http://iss.moex.com/iss/securities.xml?q=" + secid))
+      println(s"http://iss.moex.com/iss/securities.xml?q=$secid")
+      Http().singleRequest(HttpRequest(uri = s"http://iss.moex.com/iss/securities.xml?q=$secid"))
         .flatMap(response => Unmarshal(response.entity).to[String])
         .onComplete {
-          case Success(body) => ImportService.importXml(body)(exc)
+          case Success(data) => ImportService.importXmlWithSecid(data, secid)(exc)
           case Failure(e) => throw e
         }
     }
